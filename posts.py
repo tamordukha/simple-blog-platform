@@ -1,6 +1,6 @@
 #Все что связано с постами
 from flask import Flask, Blueprint, current_app, render_template, request, redirect, url_for, session, abort
-from models import get_all_posts, get_post, add_post_to_db
+from models import get_all_posts, get_post, add_post_to_db, change_post_in_db, delete_post_from_db
 
 posts_bp = Blueprint('posts', __name__)
 
@@ -20,7 +20,6 @@ def show_post(post_id):
     post = get_post(post_id, db_path)
 
     if post is None:
-        print("I LOVE BURGER")
         abort(404)
     
     user = session
@@ -41,6 +40,27 @@ def create_post():
     
     return render_template("create.html")
     
+@posts_bp.route("/post/edit/<int:post_id>", methods=["GET","POST"])
+def update_post(post_id):
+    db_path = current_app.config["DATABASE"]
+    post = get_post(post_id, db_path)
+    if request.method == "POST":
+        title = request.form.get("title")
+        content = request.form.get("content")
+        post_id = post["id"]
+        db_path = current_app.config["DATABASE"]
+        change_post_in_db(post_id, title, content, db_path)
+        return redirect(url_for("posts.index"))
+
+    return render_template("edit.html", post=post)
+
+@posts_bp.route("/post/delete/<int:post_id>")
+def delete_post(post_id):
+    db_path = current_app.config["DATABASE"]
+    delete_post_from_db(post_id, db_path)
+    return redirect(url_for("posts.index"))
+
+
 @posts_bp.route("/logout")
 def logout():
     session.clear()

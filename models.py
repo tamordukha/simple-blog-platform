@@ -64,3 +64,26 @@ def add_post_to_db(user_id, title, content, db_path):
     cursor.execute(query, data)
     conn.commit()
     conn.close()
+
+def change_post_in_db(post_id, title, content, db_path):
+    conn = get_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    query = """
+            UPDATE posts
+            SET title = ?, content = ?
+            WHERE id = ?
+            """
+    data = (title, content, post_id)
+    cursor.execute(query,data)
+    conn.commit()
+    conn.close()
+
+def delete_post_from_db(post_id, db_path):
+    conn = get_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM posts WHERE id = ?",(post_id,))
+    conn.commit()
+    conn.close()
