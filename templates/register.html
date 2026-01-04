@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <h1>Register</h1>
-    <form class="auth-form" method="post">
-        <h3>
-            <label>Username: </label>
-            <input type="text" name="username" required>
-        </h3>
-        <h3>
-            <label>Password: </label>
-            <input type="text" name="password" required>
-        </h3>
 
-        <button type="submit">submit</button>
+<div class="container">
+    <h1>Register</h1>
+
+    <form class="auth-form" method="post">
+        <label>Username: </label>
+        <input type="text" name="username" required>
+
+        <label>Password: </label>
+        <input type="text" name="password" required>
+
+        <button type="submit">Regist</button>
     </form>
 
-    <a href="/login">back to login</a>
+    <div class="actions">
+        <a class="btn btn-secondary" href="/login">Login</a>
+        <a class="btn btn-secondary" href="/">Back</a>
+    </div>
+</div>
 </body>
     
 </html>

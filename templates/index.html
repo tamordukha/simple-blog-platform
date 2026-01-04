@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blogs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Blogs</h1>
+
+    {% for post in posts %}
+        <div class="post">
+            <h2>
+                <a href="{{ url_for('posts.show_post', post_id=post['id']) }}">
+                    {{ post["title"] }}
+                </a>
+            </h2>
+
+            <div class="post-meta">
+                {{ post["created_at"] }}
+            </div>
+
+            <p>{{ post["content"][:200] }}...</p>
+        </div>
+    {% endfor %}
+
+    <div class="actions">
+        {% if session.get("user_id") %}
+            <a class="btn" href="/post/create">Create new post</a>
+            <a class="btn btn-secondary" href="/logout">Logout</a>
+        {% else %}
+            <a class="btn" href="/login">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post["title"] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <div class="post">
+        <h1>{{ post["title"] }}</h1>
+
+        <div class="post-meta">
+            {{ post["created_at"] }}
+        </div>
+
+        <div class="post-content">
+            {{ post["content"] }}
+        </div>
+
+        <div class="actions">
+            {% if session.get("user_id") %}
+                {% if session["user_id"] == post["author_id"] or user.role == "admin" %}
+                    <a class="btn" href="/post/edit/{{ post['id'] }}">Edit</a>
+                    <a class="btn btn-danger" href="/post/delete/{{ post['id'] }}">Delete</a>
+                {% endif %}
+            {% endif %}
+
+            <a class="btn btn-secondary" href="/">Back</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
