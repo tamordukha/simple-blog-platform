@@ -27,7 +27,8 @@ def login():
         if user:
             session["user_id"] = user["id"]
             session["role"] = user["role"]
-            return redirect("/")
+            return redirect(url_for("posts.index"))
+
         
         return "Incorrect password or username"
     

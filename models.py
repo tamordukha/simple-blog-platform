@@ -31,3 +31,36 @@ def login_db(username, password, db_path):
     user = cursor.fetchone()
     conn.close()
     return user
+
+#get_all_posts, get_post, create_post, update_post, delete_post
+def get_all_posts(db_path):
+    conn = get_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM posts")
+    all_posts = cursor.fetchall()
+    conn.close
+    return all_posts
+
+def get_post(post_id, db_path):
+    conn = get_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+
+    conn.close()
+    return post
+
+def add_post_to_db(user_id, title, content, db_path):
+    conn = get_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    query = "INSERT INTO posts (author_id, title, content) VALUES (?, ?, ?)"
+    data = (user_id, title, content)
+    cursor.execute(query, data)
+    conn.commit()
+    conn.close()
