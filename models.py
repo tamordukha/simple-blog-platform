@@ -1,20 +1,26 @@
 #Работа с базой данных, таблицами, SQL
 from flask import app
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def get_connection(db_path):
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
+from werkzeug.security import generate_password_hash
+
 def register_db(username, password, db_path):
+    hashed_password = generate_password_hash(password)
+
     conn = get_connection(db_path)
     cursor = conn.cursor()
 
-    query = "INSERT INTO users (username, password) VALUES (?, ?)"
-    data = (username, password)
     try:
-        cursor.execute(query, data)
+        cursor.execute(
+            "INSERT INTO users (username, password) VALUES (?, ?)",
+            (username, hashed_password)
+        )
         conn.commit()
     except sqlite3.IntegrityError:
         return "This username is already taken.", 400
@@ -25,14 +31,19 @@ def login_db(username, password, db_path):
     conn = get_connection(db_path)
     cursor = conn.cursor()
 
-    query = "SELECT * FROM users WHERE username = ? AND password = ?"
-    data = (username, password)
-    cursor.execute(query, data)
+    cursor.execute(
+        "SELECT * FROM users WHERE username = ?",
+        (username,)
+    )
+
     user = cursor.fetchone()
     conn.close()
-    return user
 
-#get_all_posts, get_post, create_post, update_post, delete_post
+    if user and check_password_hash(user["password"], password):
+        return user
+
+    return None
+
 def get_all_posts(db_path):
     conn = get_connection(db_path)
     conn.row_factory = sqlite3.Row
