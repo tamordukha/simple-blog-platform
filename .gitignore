@@ -1,6 +1,8 @@
 # Python
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
+*.pyd
 
 # Virtual environment
 venv/
@@ -9,15 +11,14 @@ venv/
 # Flask
 instance/
 *.db
-*.sqlite
 *.sqlite3
 
 # Pytest
 .pytest_cache/
-.coverage
-htmlcov/
 
-# OS / IDE
-.vscode/
-.idea/
+# OS
 .DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
